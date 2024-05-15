@@ -1,6 +1,7 @@
 import mongodb from 'mongodb';
+// eslint-disable-next-line no-unused-vars
 import Collection from 'mongodb/lib/collection';
-import envLoader from './envLoader';
+import envLoader from './env_loader';
 
 /**
  * MongoDB connection
@@ -16,7 +17,7 @@ class DBClient {
         const database = process.env.DB_DATABASE || 'files_manager';
         const dbURL = `mongodb://${host}:${port}/${database}`;
 
-        this.client = new mongodb.MongoClient(dbURL, {useUnifiedTopology: true});
+        this.client = new mongodb.MongoClient(dbURL, { useUnifiedTopology: true });
         this.client.connect();
     }
 
@@ -31,36 +32,30 @@ class DBClient {
      * get number of users from database
      */
     async nbUsers() {
-        const db = this.client.db();
-        const users = db.collection('users');
-        return users.countDocuments();
+        return this.client.db().collection('users').countDocuments();
     }
 
     /**
      * get number of files from database
      */
     async nbFiles() {
-        const db = this.client.db();
-        const files = db.collection('files');
-        return files.countDocuments();
+        return this.client.db().collection('files').countDocuments();
     }
 
     /**
      * gets a reference to the `users` collection.
      */
     async usersCollection() {
-        const db = this.client.db();
-        return db.collection('users');
+        return this.client.db().collection('users');
     }
 
     /**
      * gets a reference to the `files` collection.
      */
     async filesCollection() {
-        const db = this.client.db();
-        return db.collection('files');
+        return this.client.db().collection('files');
     }
 }
 
-const dbClient = new DBClient();
+export const dbClient = new DBClient();
 export default dbClient;
