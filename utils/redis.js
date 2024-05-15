@@ -1,9 +1,9 @@
-import { promisfy } from 'util';
+import { promisify } from 'util';
 import { createClient } from 'redis';
+
 /**
  * Redis client
  */
-
 class RedisClient {
 /**
  * Promisified redis client
@@ -24,32 +24,33 @@ constructor() {
     /**
      *  check if redis client is connected
      */
-    isAlive(){
+    isAlive() {
         return this.isClientConnected;
     }
+
     /**
      * get value from redis
      * @param {string} key
      * @returns {Promise<string>}
      */
-    async get(key){
-        const getAsync = promisify(this.client.get).bind(this.client);
-        return getAsync(key);
-        }
+    async get(key) {
+        return promisify(this.client.GET).bind(this.client)(key);
+    }
 
     /**
      * set value in redis
      */
     async set(key, value, duration) {
-        this.client.set(key, value);
-        this.client.expire(key, duration);
+        await promisify(this.client.SETEX)
+            .bind(this.client)(key, duration, value);
     }
+
     /**
      * delete key from redis
      */
     async del(key) {
-        this.client.del(key);
+        await promisify(this.client.DEL).bind(this.client)(key);
     }
 }
-const redisClient = new RedisClient();
+export const redisClient = new RedisClient();
 export default redisClient;
