@@ -1,4 +1,5 @@
-import {Express} from 'express';
+// eslint-disable-next-line no-unused-vars
+import { Express } from 'express';
 import AppController from '../controllers/AppController';
 import AuthController from '../controllers/AuthController';
 import UsersController from '../controllers/UsersController';
@@ -26,10 +27,10 @@ const injectRoutes = (api) => {
     api.put('/files/:id/unpublish', xTokenAuthenticate, FilesController.putUnpublish);
     api.get('/files/:id/data', FilesController.getFile);
 
-    api.all('*', (req, res) => {
-        throw new APIError(404, 'Not found');
+    api.all('*', (req, res, next) => {
+        errorResponse(new APIError(404, `Cannot ${req.method} ${req.url}`), req, res, next);
     });
-}
-
+    api.use(errorResponse);
+};
 
 export default injectRoutes;

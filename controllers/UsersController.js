@@ -1,8 +1,9 @@
+/* eslint-disable import/no-named-as-default */
 import sha1 from 'sha1';
 import Queue from 'bull/lib/queue';
-import dbClient from "../utils/db";
+import dbClient from '../utils/db';
 
-const userQueue = new Queue('userQueue');
+const userQueue = new Queue('email sending');
 
 export default class UsersController {
     static async postNew(req, res) {
