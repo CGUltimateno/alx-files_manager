@@ -1,8 +1,7 @@
-import mongodb from 'mongodb';
+const mongodb = require('mongodb');
 // eslint-disable-next-line no-unused-vars
-import Collection from 'mongodb/lib/collection';
-import envLoader from './env_loader';
-
+const envLoader = require('./env_loader');
+const Collection = require('mongodb/lib/collection');
 /**
  * MongoDB connection
  */
@@ -57,5 +56,5 @@ class DBClient {
     }
 }
 
-export const dbClient = new DBClient();
-export default dbClient;
+const dbClient = new DBClient();
+module.exports = dbClient;
